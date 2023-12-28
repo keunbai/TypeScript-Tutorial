@@ -1,6 +1,14 @@
 //* =================================
 //! Challenge #3
 //*   - Event Processor 클래스 생성 및 적용 
+//*
+//*   ＃ 적용 문법 
+//*    1) keyof, extends keyof, in keyof, extends
+//*    2) Generic for function call signature 
+//*    3) Utility type 中 Intrinsic string manupulation type w/ Templete literal type
+//*    4) Mapped type 
+//*
+//!   ※ 'noImplicityAny = false' in tsconfig.json 필수
 //* =================================
 
 
@@ -226,6 +234,16 @@ processed = [    // data 객체 내 user 속성 없을 시 미처리 (예제 기
 
 //! Case 1. keyof
 
+// Mapped type
+type FilterFunc<T> = (data: T) => boolean;    // call signature type2
+type MapFunc<T> = (data: T) => T;
+
+type Handler<T> = {
+  [KT in keyof T as `filter${Capitalize<KT & string>}`]?: FilterFunc<T[KT]>
+} & {
+  [KT in keyof T as `map${Capitalize<KT & string>}`]?: MapFunc<T[KT]> 
+}
+
 // Type
 interface IEventMap {
   login: {
@@ -239,21 +257,31 @@ interface IEventMap {
   }
 }
 
-type FilterFunc<T> = (data: T) => boolean;
-type MapFunc<T> = (data: T) => T;
+// Type
+interface IEventMap {
+  login: {
+    user?: string,
+    name?: string,
+    hasSession?: boolean
+  },
+  logout: {
+    user?: string,
+    name?: string
+  }
+}
+
+//type EventMapHandler = {
+//  filterLogin?: (data: IEventMap['login']) => boolean,
+//  mapLogin?: (data: IEventMap['login']) => IEventMap['login'],
+//  filterLogout?: (data: IEventMap['logout']) => boolean,
+//  mapLogout?: (data: IEventMap['logout']) => IEventMap['logout']
+//}
+type EventMapHandler = Handler<IEventMap>;
 
 type EventProcessed<T> = {
   eventName: keyof T,
   data: T[keyof T]
 }
-
-// Mapped type
-type Handler<T> = {
-  [KT in keyof T as `filter${Capitalize<KT & string>}`]?: FilterFunc<T[KT]>
-} & {
-  [KT in keyof T as `map${Capitalize<KT & string>}`]?: MapFunc<T[KT]> 
-}
-
 
 //
 class EventProcessor<T extends {}> {
@@ -265,8 +293,8 @@ class EventProcessor<T extends {}> {
     this.handlers.push(handler);
   }
 
-  //handleEvent(eventName: keyof T & string, data: T[keyof T]) {  
-  handleEvent<KT extends keyof T>(eventName: KT, data: T[KT]) {  
+  handleEvent(eventName: keyof T & string, data: T[keyof T]) {  
+  //handleEvent<KT extends keyof T>(eventName: KT, data: T[KT]) {  
     let allowEvent = true;
     
     const capitalize = (s: string) => `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
@@ -311,7 +339,8 @@ const uep = new UserEventProcessor<IEventMap>();
 //const uep = new UserEventProcessor();
 
 //
-const handler: Handler<IEventMap> = {
+//const handler: Handler<IEventMap> = {
+  const handler: EventMapHandler = {
   filterLogin: ({ user }) => Boolean(user),
   mapLogin: (data) => ({
     ...data,
@@ -342,6 +371,136 @@ uep.handleEvent('logout', {   //! 'logout' 이벤트 filter 통과 X
 });
 
 console.log(uep.getProcessedEvents());
+
+
+//! Case 2. extends keyof
+/*
+// Mapped type
+type FilterFunc<T> = (data: T) => boolean;    // call signature type2
+type MapFunc<T> = (data: T) => T;
+
+type Handler<T> = {
+  [KT in keyof T as `filter${Capitalize<KT & string>}`]?: FilterFunc<T[KT]>
+} & {
+  [KT in keyof T as `map${Capitalize<KT & string>}`]?: MapFunc<T[KT]> 
+}
+
+// Type
+interface IEventMap {
+  login: {
+    user?: string,
+    name?: string,
+    hasSession?: boolean
+  },
+  logout: {
+    user?: string,
+    name?: string
+  }
+}
+
+//type EventMapHandler = {
+//  filterLogin?: (data: IEventMap['login']) => boolean,
+//  mapLogin?: (data: IEventMap['login']) => IEventMap['login'],
+//  filterLogout?: (data: IEventMap['logout']) => boolean,
+//  mapLogout?: (data: IEventMap['logout']) => IEventMap['logout']
+//}
+type EventMapHandler = Handler<IEventMap>;
+
+type EventProcessed<T, KT extends keyof T> = {
+  eventName: KT,
+  data: T[KT]
+}
+
+
+//
+class EventProcessor<T extends {}, KT extends keyof T> {
+  //private handlers = [] as Handler<T>[] ;
+  private handlers: Handler<T>[] = [] ;
+  private processed: EventProcessed<T, KT>[] = [];
+
+  addHandler(handler: Handler<T>) {
+    this.handlers.push(handler);
+  }
+
+  handleEvent(eventName: KT, data: T[KT]) {  
+    let allowEvent = true;
+    
+    const capitalize = (s: string) => `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
+
+    for (const handler of this.handlers) {
+      const filterFunc = handler[`filter${capitalize(eventName as string)}`];   //! noImplicityAny = false in tsconfig.json
+      //const filterFunc = handler[`filter${capitalize(eventName)}` as keyof Handler<T>] as ((value: T[KT]) => boolean);  //? 도대체 이게 뭔..
+      
+      if (filterFunc && !filterFunc(data)) {
+        allowEvent = false;
+        break;
+      }
+    }
+
+    if (allowEvent) {
+      let mappedData = {...data};
+      for (const handler of this.handlers) {
+        const mapFunc = handler[`map${capitalize(eventName as string)}`];  //! noImplicityAny = false in tsconfig.json
+        //const mapFunc = handler[`map${capitalize(eventName)}` as keyof Handler<T>] as ((value: T[KT]) => T[KT]);       //? 도대체 이게 뭔..
+
+        if (mapFunc) {
+          mappedData = mapFunc(mappedData);
+        }
+      }
+
+      this.processed.push({
+        eventName,
+        data: mappedData        
+      });
+    }
+  }
+
+  getProcessedEvents() {
+    return this.processed;
+  }
+}
+
+class UserEventProcessor<T extends {}, KT extends keyof T> extends EventProcessor<T, KT> {}    //! ver. 1
+const uep = new UserEventProcessor<IEventMap, keyof IEventMap>();
+
+//class UserEventProcessor extends EventProcessor<IEventMap, keyof IEventMap> {}        //! ver. 2
+//const uep = new UserEventProcessor();
+
+//
+//const handler: Handler<IEventMap> = {
+const handler: EventMapHandler = {
+  filterLogin: ({ user }) => Boolean(user),
+  mapLogin: (data) => ({
+    ...data,
+    hasSession: Boolean(data.user && data.name)
+  }),
+  filterLogout: ({ user }) => Boolean(user)
+};
+
+uep.addHandler(handler);
+
+uep.handleEvent('login', {    //! 'login' 이벤트 filter 통과 X
+  name: 'jack'
+});
+
+uep.handleEvent('login', {    //! 'login' 이벤트 filter 통과 + map 의한 데이터 객체 속성 추가 
+  user: 'tom',
+  name: 'tomas'
+});
+uep.handleEvent('logout', {   //! 'logout' 이벤트 filtr 통과 + map 없음    
+  user: 'tom'
+});
+
+uep.handleEvent('login', {    //! 'login' 이벤트 filter 통과 + map 의한 데이터 객체 속성 추가 X
+  user: 'foo'
+});
+uep.handleEvent('logout', {   //! 'logout' 이벤트 filter 통과 X
+  name: 'foobear'
+});
+
+console.log(uep.getProcessedEvents());
+*/
+
 
 /*
 [

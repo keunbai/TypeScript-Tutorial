@@ -134,7 +134,7 @@ const Heading: React.FunctionComponent<{title: string}> = ({ title }): JSX.Eleme
 };
 
 
-//const Box = ({ children }: {children: React.ReactNode}) => (
+// const Box = ({ children }: {children: React.ReactNode}) => (
 const Box: React.FunctionComponent<{children: React.ReactNode}> = ({ children }) => (   //! ref) tut07  
   <div
     style={{

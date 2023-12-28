@@ -2,6 +2,7 @@
 //!         1. Every Types
 //* =================================
 
+
 //*
 const myValue: string = "jack";
 let myVariable: number = 1;
@@ -20,12 +21,12 @@ const multipliedValues= myValues1.map((a) => a * 10);
 
 
 //*
-interface Person {
+interface IPerson {
   first: string;
   last: string;
 }
 
-const myPerson: Person = {
+const myPerson: IPerson = {
   first: "jack",
   last: "herrington",
 };

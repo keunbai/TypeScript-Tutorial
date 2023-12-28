@@ -43,19 +43,19 @@ function getFullNameObjects<T extends (...arg: any[]) => any>(
 //const getFullNameObjects = <T extends (...arg: any[]) => any>(
 //  iterFunc: T, 
 //  data: Parameters<T>[0][]
-//): ReturnType<T>[] {
-//  return data.map((item) => iterFunc(item));
-//}
-
-//const getFullNameObjects = <T extends (...arg: any[]) => any>(
-//  iterFunc: T, 
-//  data: Parameters<T>[0][]
 //) => data.map((item) => iterFunc(item));
 
-const records = getFullNameObjects(addFullName, [
+//
+const records = getFullNameObjects<typeof addFullName>(addFullName, [
   {first: 'kb', last: 'lee'}, 
   {first: 'jm', last: 'hong'}
 ]);
+
+//const records = getFullNameObjects(addFullName, [
+//  {first: 'kb', last: 'lee'}, 
+//  {first: 'jm', last: 'hong'}
+//]);
+
 console.log(records);
 console.log(records.map((item) => item.fullName));
 console.log('\n');

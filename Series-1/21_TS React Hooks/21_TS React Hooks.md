@@ -141,7 +141,7 @@ const reducer = (state: ITodo[], action: Action): ITodo[] => {
 function App() {
   const [todos, dispatch] = useReducer(reducer, []);
   //const newTodoRef = useRef(null);
-  const newTodoRef = useRef<HTMLInputElement>(null);
+  const newTodoRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     newTodoRef.current.focus();  

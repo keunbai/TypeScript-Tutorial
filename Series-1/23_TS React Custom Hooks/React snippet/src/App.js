@@ -96,7 +96,7 @@ function App() {
 
   return (
     <div>
-      <Heading title="Todoss" />
+      <Heading title="Todos" />
 
       <div>
         <input 

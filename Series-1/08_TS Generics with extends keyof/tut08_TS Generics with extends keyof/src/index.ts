@@ -100,12 +100,11 @@ console.log(names);
 console.log(ages, '\n');
 
 
-
 //* ---------------------------------
 //! Example #2
 //*   - Event map
 //* ---------------------------------
-/*
+
 //* basic
 interface IBaseInfo {
   time: number,
@@ -164,4 +163,3 @@ sendEvent2('addToCart', {
   time: 10,
 });
 sendEvent2('checkout', {time: 20, user: 'bob'});
-*/
