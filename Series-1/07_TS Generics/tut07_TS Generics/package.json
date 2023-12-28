@@ -1,0 +1,14 @@
+{
+  "name": "tut01_TS-Basics",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node src",
+    "build": "tsc && node dist"
+  },  
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
