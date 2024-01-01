@@ -1,21 +1,54 @@
+//* =======================================
+//! (from tut23 React version)
+//* =======================================
+
 //* ---------
 //! Case 1
+//*  - useReducer() 만 옮김
 //* ---------
 /*
-import React, { useEffect, useCallback, useRef } from 'react';
-import { useTodos } from "./hooks/useTodos_o";
+import { useEffect, useCallback, useRef } from 'react';
+import { useTodos, ContextProvider } from "./hooks/useTodos";
 import './App.css';
 
 //! Type 
 interface ITodo {
-  id: string,
+  id: number,
   text: string,
   done: boolean
 }
 
 //! App Comp.
+function AppWrapper() {
+  const initState: ITodo[] = [
+    {
+      id: 1,
+      text: 'Study TS React first!',
+      done: false
+    }
+  ];
+
+  return (
+    <div>
+      <Heading title="React useContext() & TypeScript" />
+      <h4>ToDos</h4>
+      
+      <ContextProvider initialState={initState}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '50% 50%'
+        }}>
+          <App/>
+          <JustShowTodos/>
+        </div>
+      </ContextProvider>
+    </div>
+
+  );
+}
+
 function App() {
-  const { todos, dispatch } = useTodos([]);
+  const { todos, dispatch } = useTodos();
   //const newTodoRef = useRef(null);
   const newTodoRef = useRef<HTMLInputElement | null>(null);
 
@@ -46,9 +79,6 @@ function App() {
 
   return (
     <div>
-      <Heading title="Custom Hooks & TypeScript"/>
-      
-      <h4>ToDos</h4>
       <div>
         <input 
           id="ToDo" 
@@ -60,14 +90,29 @@ function App() {
       </div>      
       <br />
       {todos.map((todo) => (
-        <div key={todo.id}>
+        <li key={todo.id}>
           {todo.text}
           <button style={{marginLeft: "0.5rem"}} onClick={() => handleRemoveClick(todo)}>Remove</button>
-        </div>
+        </li>
       ))}
     </div>
   );
 }
+
+function JustShowTodos() {
+  const { todos } = useTodos();
+
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id} onClick={() => alert(todo.id)}>
+          {todo.text}
+        </li>
+      ))}
+    </ul>
+  )
+} 
+
 
 //! Type
 
@@ -76,28 +121,57 @@ const Heading: React.FunctionComponent<{title: string}> = ({ title }): JSX.Eleme
   return <h2>{title}</h2>
 };
 
-export default App;
+export default AppWrapper;
 */
 
 
 //* ---------
 //! Case 2
+//*   - dispatch() 숨김
 //* ---------
 
 import React, { useEffect, useCallback, useRef } from 'react';
-import { useTodos } from "./hooks/useTodos_o";
+import { useTodos, ContextProvider } from "./hooks/useTodos";
 import './App.css';
 
 //! Type 
 interface ITodo {
-  id: string,
+  id: number,
   text: string,
   done: boolean
 }
 
 //! App Comp.
+function AppWrapper() {
+  const initState: ITodo[] = [
+    {
+      id: 1,
+      text: 'Study TS React first!',
+      done: false
+    }
+  ];
+
+  return (
+    <div>
+      <Heading title="React useContext() & TypeScript" />
+      <h4>ToDos</h4>
+      
+      <ContextProvider initialState={initState}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '50% 50%'
+        }}>
+          <App/>
+          <JustShowTodos/>
+        </div>
+      </ContextProvider>
+    </div>
+
+  );
+}
+
 function App() {
-  const { todos, addTodo, removeTodo } = useTodos([]);
+  const { todos, addTodo, removeTodo } = useTodos();
   //const newTodoRef = useRef(null);
   const newTodoRef = useRef<HTMLInputElement | null>(null);
 
@@ -106,7 +180,7 @@ function App() {
   }, []);  
 
   const handleRemoveClick = (todo: ITodo) => {
-    removeTodo(todo.id)
+    removeTodo(todo.id);
 
     newTodoRef.current.focus();
   };
@@ -122,9 +196,6 @@ function App() {
 
   return (
     <div>
-      <Heading title="Custom Hooks & TypeScript"/>
-      
-      <h4>ToDos</h4>
       <div>
         <input 
           id="ToDo" 
@@ -136,14 +207,28 @@ function App() {
       </div>      
       <br />
       {todos.map((todo) => (
-        <div key={todo.id}>
+        <li key={todo.id}>
           {todo.text}
           <button style={{marginLeft: "0.5rem"}} onClick={() => handleRemoveClick(todo)}>Remove</button>
-        </div>
+        </li>
       ))}
     </div>
   );
 }
+
+function JustShowTodos() {
+  const { todos } = useTodos();
+
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id} onClick={() => alert(todo.id)}>
+          {todo.text}
+        </li>
+      ))}
+    </ul>
+  )
+} 
 
 //! Type
 
@@ -152,4 +237,4 @@ const Heading: React.FunctionComponent<{title: string}> = ({ title }): JSX.Eleme
   return <h2>{title}</h2>
 };
 
-export default App;
+export default AppWrapper;

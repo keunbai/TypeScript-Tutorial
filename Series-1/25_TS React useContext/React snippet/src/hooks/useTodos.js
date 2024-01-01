@@ -60,7 +60,6 @@ const reducer = (state, action) => {
         {
           //id: state.length,  //? 비추(중복 가능)
           id: state.length ? state[state.length-1].id + 1 : 1,     
-          id: nanoid(),
           text: action.text,
           done: false,
         },
@@ -95,14 +94,14 @@ export function useTodos() {
       type: "ADD",
       text,
     });
-  }, []);  
+  }, [dispatch]);  
 
   const removeTodo = useCallback((id) => {
     dispatch({
       type: "REMOVE",
       id,
     });
-  }, []);
+  }, [dispatch]);
 
   return { todos, addTodo, removeTodo }
 }

@@ -1,8 +1,9 @@
 //* =======================================
-//! (from tut21 React version)
+//! (from tut23 React version)
 //* =======================================
 
 //! Case 1
+//*  - useReducer() 만 옮김
 
 import { useEffect, useRef, useCallback } from 'react';
 import { useTodos, ContextProvider } from "./hooks/useTodos";
@@ -106,6 +107,7 @@ export default AppWrapper;
 
 
 //! Case 2
+//*  - dispatch() 숨김
 /*
 import { useEffect, useRef, useCallback } from 'react';
 import { useTodos, ContextProvider } from "./hooks/useTodos";
@@ -142,7 +144,7 @@ function App() {
   }, []);   
 
   const handleRemoveClick = useCallback((todo) => {
-    removeTodo(todo.id)
+    removeTodo(todo.id);
 
     newTodoRef.current.focus();
   }, [removeTodo]);

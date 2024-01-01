@@ -197,6 +197,7 @@ function addFullName(name: Name): Name & {
   }
 }
 
+//function getFullNameObjects<T extends () => {}>(    //? Error
 function getFullNameObjects<T extends (...arg: any[]) => any>(
   iterFunc: T, 
   data: Parameters<T>[0][]

@@ -3,7 +3,17 @@
 Ref) &nbsp;
 <br />
 
-<span style="color:cyan"><b>Custom Hook 사용으로 ToDo 앱 구현</b></span>
+### <span style="color:cyan"><b>Custom Hook 사용으로 ToDo 앱 구현</b></span>
+
+<br />
+
+> <span style="color:orange"><b>React + TypeScript 코딩 원칙</b></span>
+>
+> 1. `void` 타입 인자(파라미터)의 리액트 함수 컴포넌트 선언은 심플하게!  
+> 2. 리액트 함수 컴포넌트 내부에서는 심플하게 내용 채우기!  
+> 3. 리액트 함수 컴포넌트 호출은 심플하게!  
+>
+> &nbsp; &nbsp; &nbsp; ※ &nbsp;리액트 함수 컴포넌트 파일 확장자는 `.tsx` 사용 필수!
 
 <br />
 
@@ -115,7 +125,7 @@ function App() {
 <br />
 
 &nbsp;2. &nbsp;<span style="color:orange"><b>Custom Hook 이용</b></span>  
-&nbsp; &nbsp; &nbsp; &nbsp;- &nbsp;Case1 (`useReducer()`만 옮김) &nbsp;vs &nbsp;Case2 (`dispatch()` 내용 숨김)  
+&nbsp; &nbsp; &nbsp; &nbsp;- &nbsp;Case1 (`useReducer()`만 옮김) &nbsp;vs &nbsp;Case2 (`dispatch()` 숨김)  
 &nbsp; &nbsp; &nbsp; &nbsp;※ &nbsp;Custom Hook 내부에서 반환값으로 나가는 함수는 `useCallback()` 이용 추천!  
 
 ```ts

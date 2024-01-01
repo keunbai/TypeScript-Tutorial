@@ -173,3 +173,56 @@ setState5([111, 222, 333]);
 console.log(getState5(), '\n');
 
 
+//* =================================
+//! 3.6 Utility Type
+//*   - 기존 타입으로부터 제네릭 활용 새로운 타입 생성  
+//* =================================
+
+//* ---------------------------------
+//! Parameters<T>, ReturnType<T>
+//* ---------------------------------
+//
+type Name = {
+  first: string,
+  last: string
+}
+
+//
+function addFullName(name: Name): Name & {
+  fullName: string
+} {
+  return {
+    ...name,
+    fullName: `${name.first} ${name.last}` 
+  }
+}
+
+//function getFullNameObjects<T extends () => {}>(    //? Error
+function getFullNameObjects<T extends (...arg: any[]) => any>(
+  iterFunc: T, 
+  data: Parameters<T>[0][]
+): ReturnType<T>[] {
+  return data.map((item: Parameters<T>[0]): ReturnType<T> => iterFunc(item));
+}
+
+//const getFullNameObjects = <T extends (...arg: any[]) => any>(
+//  iterFunc: T, 
+//  data: Parameters<T>[0][]
+//): ReturnType<T>[] {
+//  return data.map((item) => iterFunc(item));
+//}
+
+//
+const records = getFullNameObjects<typeof addFullName>(addFullName, [
+  {first: 'kb', last: 'lee'}, 
+  {first: 'jm', last: 'hong'}
+]);
+
+// const records = getFullNameObjects(addFullName, [
+//   {first: 'kb', last: 'lee'}, 
+//   {first: 'jm', last: 'hong'}
+// ]);
+
+console.log(records);
+console.log(records.map((item) => item.fullName));
+console.log('\n');

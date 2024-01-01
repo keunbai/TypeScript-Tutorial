@@ -2,12 +2,29 @@
 
 <br />
 
+### <span style="color:cyan"><b>React + TypeScript Basic</b></span>
+
+<br />
+
+> <span style="color:orange"><b>React + TypeScript 코딩 원칙</b></span>
+>
+> 1. `void` 타입 인자(파라미터)의 리액트 함수 컴포넌트 선언은 심플하게!  
+> 2. 리액트 함수 컴포넌트 내부에서는 심플하게 내용 채우기!  
+> 3. 리액트 함수 컴포넌트 호출은 심플하게!  
+>
+> &nbsp; &nbsp; &nbsp; ※ &nbsp;리액트 함수 컴포넌트 파일 확장자는 `.tsx` 사용 필수!
+
+<br />
+
+
 &nbsp;0. &nbsp;<span style="color:orange">Project setup w/ yarn</span>  
 &nbsp; &nbsp; &nbsp;1) &nbsp;`npx yarn create react-app [프로젝트명] --template typescript`  
 &nbsp; &nbsp; &nbsp;2) &nbsp;CRA 기본 파일 정리  
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp;`App.tsx`, `App.css` 수정  
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp;`package.json`, `index.tsx` 수정  
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp;`src` 폴더 내 불필요 파일 삭제  
+
+<br />
 
 &nbsp;1. &nbsp;<span style="color:orange">Components</span>  
 
@@ -235,4 +252,49 @@ const ListEvent: React.FunctionComponent<IComp> = ({ items, onClick }) => (   //
 
 
 export default App;
+```
+
+<br />
+
+&nbsp;※ &nbsp;<span style="color:orange">React Function Component 선언 두가지 방식</span>  
+- basic vs Call signature  
+
+&nbsp; <u>Case #1 - **Basic**</u>
+
+```tsx
+function Heading({ title }: {title: string}) {
+  return <h2>{title}</h2>
+};
+
+function ContextProvider({ 
+  initialState, 
+  children 
+}: {
+  initialState: ITodo[],
+  children: any
+}) {
+  return (
+    <todoContext.Provider value={useReducerManager(initialState)}>
+      {children}
+    </todoContext.Provider>
+  )
+}
+```
+<br />
+
+&nbsp; <u>Case #2 - **Call signature**</u>
+
+```tsx
+const Heading: React.FunctionComponent<{title: string}> = ({ title }) => {
+ return <h2>{title}</h2>
+};
+
+const ContextProvider: React.FunctionComponent<{
+  initialState: ITodo[],
+  children: any
+}> = ({ initialState, children }) => (
+  <todoContext.Provider value={useReducerManager(initialState)}>
+    {children}
+  </todoContext.Provider>
+)
 ```

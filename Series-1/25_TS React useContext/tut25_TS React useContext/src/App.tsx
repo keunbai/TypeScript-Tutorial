@@ -1,8 +1,15 @@
-import { 
-  useEffect, useReducer, useRef, useCallback, createContext, useContext 
-} from 'react';
-import './App.css';
+//* =======================================
+//! (from tut23 React version)
+//* =======================================
 
+//* ---------
+//! Case 1
+//*  - useReducer() 만 옮김
+//* ---------
+/*
+import { useEffect, useCallback, useRef } from 'react';
+import { useTodos, ContextProvider } from "./hooks/useTodos";
+import './App.css';
 
 //! Type 
 interface ITodo {
@@ -11,63 +18,39 @@ interface ITodo {
   done: boolean
 }
 
-type Action = { 
-  type: "ADD", 
-  text: string 
-} | { 
-  type: "REMOVE", 
-  id: number,
-};
-
-//type IUseReducerManager = {
-//  todos: ITodo[];
-//  dispatch: React.Dispatch<Action>;
-//}
-type IUseReducerManager = ReturnType<typeof useReducerManager>;
-
-
 //! App Comp.
-//const todoContext = createContext<IUseReducerManager>({
-//  todos: [],
-//  dispatch: () => {}
-//});
-const todoContext = createContext<IUseReducerManager>(null);
-//const todoContext = createContext(null);
+function AppWrapper() {
+  const initState: ITodo[] = [
+    {
+      id: 1,
+      text: 'Study TS React first!',
+      done: false
+    }
+  ];
 
-const reducer = (state: ITodo[], action: Action): ITodo[] => {
-  switch (action.type) {
-    case "ADD":
-      return [
-        ...state,
-        {
-          //id: state.length,  //? 비추(중복 가능)
-          id: state.length ? state[state.length-1].id + 1 : 1,
-          text: action.text,
-          done: false,
-        },
-      ];
-    case "REMOVE":
-      return state.filter(({ id }) => id !== action.id);
-    default:
-      //throw new Error();
-      return state;
-  }
-}; 
+  return (
+    <div>
+      <Heading title="React useContext() & TypeScript" />
+      <h4>ToDos</h4>
+      
+      <ContextProvider initialState={initState}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '50% 50%'
+        }}>
+          <App/>
+          <JustShowTodos/>
+        </div>
+      </ContextProvider>
+    </div>
 
-function useReducerManager(initialState: ITodo[]): {
-  todos: ITodo[],
-  dispatch: React.Dispatch<Action>
-} {
-  const [todos, dispatch] = useReducer(reducer, initialState);
-
-  return {todos, dispatch};  
+  );
 }
 
-
 function App() {
-  const [todos, dispatch] = useReducer(reducer, []);
+  const { todos, dispatch } = useTodos();
   //const newTodoRef = useRef(null);
-  const newTodoRef = useRef<HTMLInputElement>(null);
+  const newTodoRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     newTodoRef.current.focus();  
@@ -92,15 +75,10 @@ function App() {
       newTodoRef.current.value = '';
       newTodoRef.current.focus();      
     }  
-  }, []);
-
+  }, [dispatch]);
 
   return (
     <div>
-      <Heading title="React useContext() & TypeScript"/>
-
-      <Heading title="Todos" />
-
       <div>
         <input 
           id="ToDo" 
@@ -109,27 +87,154 @@ function App() {
           placeholder="What to do?"
         />
         <button style={{marginLeft: "0.5rem"}} onClick={handleAddClick}>Add Todo</button>
-      </div>
-      <br />         
+      </div>      
+      <br />
       {todos.map((todo) => (
-        <div key={todo.id}>
+        <li key={todo.id}>
           {todo.text}
           <button style={{marginLeft: "0.5rem"}} onClick={() => handleRemoveClick(todo)}>Remove</button>
-        </div>
+        </li>
       ))}
-      <br />
     </div>
   );
 }
 
+function JustShowTodos() {
+  const { todos } = useTodos();
+
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id} onClick={() => alert(todo.id)}>
+          {todo.text}
+        </li>
+      ))}
+    </ul>
+  )
+} 
+
 
 //! Type
 
-
 //! Sub Comp.
-const Heading: React.FunctionComponent<{title: string}> = ({ title }) => {
+const Heading: React.FunctionComponent<{title: string}> = ({ title }): JSX.Element => {
   return <h2>{title}</h2>
 };
 
+export default AppWrapper;
+*/
 
-export default App;
+
+//* ---------
+//! Case 2
+//*   - dispatch() 숨김
+//* ---------
+
+import React, { useEffect, useCallback, useRef } from 'react';
+import { useTodos, ContextProvider } from "./hooks/useTodos";
+import './App.css';
+
+//! Type 
+interface ITodo {
+  id: number,
+  text: string,
+  done: boolean
+}
+
+//! App Comp.
+function AppWrapper() {
+  const initState: ITodo[] = [
+    {
+      id: 1,
+      text: 'Study TS React first!',
+      done: false
+    }
+  ];
+
+  return (
+    <div>
+      <Heading title="React useContext() & TypeScript" />
+      <h4>ToDos</h4>
+      
+      <ContextProvider initialState={initState}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '50% 50%'
+        }}>
+          <App/>
+          <JustShowTodos/>
+        </div>
+      </ContextProvider>
+    </div>
+
+  );
+}
+
+function App() {
+  const { todos, addTodo, removeTodo } = useTodos();
+  //const newTodoRef = useRef(null);
+  const newTodoRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    newTodoRef.current.focus();  
+  }, []);  
+
+  const handleRemoveClick = (todo: ITodo) => {
+    removeTodo(todo.id);
+
+    newTodoRef.current.focus();
+  };
+
+  const handleAddClick = useCallback(() => {
+    if (newTodoRef.current) {
+      addTodo(newTodoRef.current.value);  
+
+      newTodoRef.current.value = '';
+      newTodoRef.current.focus();      
+    }  
+  }, [addTodo]);
+
+  return (
+    <div>
+      <div>
+        <input 
+          id="ToDo" 
+          type="text" 
+          ref={newTodoRef} 
+          placeholder="What to do?"
+        />
+        <button style={{marginLeft: "0.5rem"}} onClick={handleAddClick}>Add Todo</button>
+      </div>      
+      <br />
+      {todos.map((todo) => (
+        <li key={todo.id}>
+          {todo.text}
+          <button style={{marginLeft: "0.5rem"}} onClick={() => handleRemoveClick(todo)}>Remove</button>
+        </li>
+      ))}
+    </div>
+  );
+}
+
+function JustShowTodos() {
+  const { todos } = useTodos();
+
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id} onClick={() => alert(todo.id)}>
+          {todo.text}
+        </li>
+      ))}
+    </ul>
+  )
+} 
+
+//! Type
+
+//! Sub Comp.
+const Heading: React.FunctionComponent<{title: string}> = ({ title }): JSX.Element => {
+  return <h2>{title}</h2>
+};
+
+export default AppWrapper;

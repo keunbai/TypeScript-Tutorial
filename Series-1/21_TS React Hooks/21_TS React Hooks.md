@@ -1,10 +1,19 @@
 # <p><span style="color:cyan">21. TS React Hooks</span></p>
 
 Ref) &nbsp;https://github.com/typescript-cheatsheets/react 
+<br />
+
+### <span style="color:cyan"><b>useState(), useEffect(), useReducer(), useRef(), useCallback()</b></span>
 
 <br />
 
-<span style="color:cyan"><b>useState(), useEffect(), useReducer(), useRef(), useCallback()</b></span>
+> <span style="color:orange"><b>React + TypeScript 코딩 원칙</b></span>
+>
+> 1. `void` 타입 인자(파라미터)의 리액트 함수 컴포넌트 선언은 심플하게!  
+> 2. 리액트 함수 컴포넌트 내부에서는 심플하게 내용 채우기!  
+> 3. 리액트 함수 컴포넌트 호출은 심플하게!  
+>
+> &nbsp; &nbsp; &nbsp; ※ &nbsp;리액트 함수 컴포넌트 파일 확장자는 `.tsx` 사용 필수!
 
 <br />
 

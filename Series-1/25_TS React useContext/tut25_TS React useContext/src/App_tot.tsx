@@ -1,11 +1,16 @@
-import { nanoid } from 'nanoid';
-import React, { useEffect, useCallback, useReducer, useRef } from 'react';
+//* =======================================
+//! (from tut21 React version)
+//* =======================================
+
+import { 
+  useEffect, useReducer, useRef, useCallback, createContext, useContext 
+} from 'react';
 import './App.css';
 
 
 //! Type 
 interface ITodo {
-  id: string,
+  id: number,
   text: string,
   done: boolean
 }
@@ -15,10 +20,24 @@ type Action = {
   text: string 
 } | { 
   type: "REMOVE", 
-  id: string,
+  id: number,
 };
 
+//type UseReducerManager = {
+//  todos: ITodo[];
+//  dispatch: React.Dispatch<Action>;
+//}
+type UseReducerManager = ReturnType<typeof useReducerManager>;
+
+
 //! App Comp.
+const todoContext = createContext<UseReducerManager>({
+  todos: [],
+  dispatch: () => {}
+});
+//const todoContext = createContext<UseReducerManager>(null);
+//const todoContext = createContext(null);
+
 const reducer = (state: ITodo[], action: Action): ITodo[] => {
   switch (action.type) {
     case "ADD":
@@ -26,7 +45,7 @@ const reducer = (state: ITodo[], action: Action): ITodo[] => {
         ...state,
         {
           //id: state.length,  //? 비추(중복 가능)
-          id: nanoid(),
+          id: state.length ? state[state.length-1].id + 1 : 1,
           text: action.text,
           done: false,
         },
@@ -39,10 +58,47 @@ const reducer = (state: ITodo[], action: Action): ITodo[] => {
   }
 }; 
 
+function useReducerManager(initialState: ITodo[]): {
+  todos: ITodo[],
+  dispatch: React.Dispatch<Action>
+} {
+  const [todos, dispatch] = useReducer(reducer, initialState);
+
+  return {todos, dispatch};  
+}
+
+const initState: ITodo[] = [
+  {
+    id: 1,
+    text: 'Study TS React first!',
+    done: false
+  }
+];
+
+function AppWrapper() {
+  return (
+    <div>
+      <Heading title="React useContext() & TypeScript" />
+      <Heading title="Todos" />
+      
+      <todoContext.Provider value={useReducerManager(initState)}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '50% 50%'
+        }}>
+          <App/>
+          <JustShowTodos/>
+        </div>
+      </todoContext.Provider>
+    </div>
+
+  );
+}
+
 function App() {
-  const [todos, dispatch] = useReducer(reducer, []);
-  //const newTodoRef = useRef(null);
-  const newTodoRef = useRef<HTMLInputElement>(null);
+  const { todos, dispatch } = useContext(todoContext);
+  const newTodoRef = useRef(null);
+  //const newTodoRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     newTodoRef.current.focus();  
@@ -67,15 +123,10 @@ function App() {
       newTodoRef.current.value = '';
       newTodoRef.current.focus();      
     }  
-  }, []);
-
+  }, [dispatch]);
 
   return (
     <div>
-      <Heading title="Generic Components & TypeScript"/>
-
-      <Heading title="Todos" />
-
       <div>
         <input 
           id="ToDo" 
@@ -87,24 +138,41 @@ function App() {
       </div>
       <br />         
       {todos.map((todo) => (
-        <div key={todo.id}>
+        <li key={todo.id}>
           {todo.text}
           <button style={{marginLeft: "0.5rem"}} onClick={() => handleRemoveClick(todo)}>Remove</button>
-        </div>
+        </li>
       ))}
       <br />
     </div>
   );
 }
 
+function JustShowTodos() {
+  const { todos } = useContext(todoContext);
+
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id} onClick={() => alert(todo.id)}>
+          {todo.text}
+        </li>
+      ))}
+    </ul>
+  )
+} 
+
 
 //! Type
 
 
 //! Sub Comp.
-const Heading: React.FunctionComponent<{title: string}> = ({ title }) => {
+function Heading({ title }: {title: string}) {
   return <h2>{title}</h2>
 };
+//const Heading: React.FunctionComponent<{title: string}> = ({ title }) => {
+//  return <h2>{title}</h2>
+//};
 
 
-export default App;
+export default AppWrapper;

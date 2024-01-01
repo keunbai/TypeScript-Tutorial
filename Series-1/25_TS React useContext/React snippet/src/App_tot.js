@@ -34,15 +34,15 @@ function useReducerManager(initialState) {
   return {todos, dispatch};
 }
 
-const initState = [
-  {
-    id: 1,
-    text: 'Study TS React first!',
-    done: false
-  }
-];
-
 function AppWrapper() {
+  const initState = [
+    {
+      id: 1,
+      text: 'Study TS React first!',
+      done: false
+    }
+  ];
+
   return (
     <todoContext.Provider value={useReducerManager(initState)}>
       <div style={{
