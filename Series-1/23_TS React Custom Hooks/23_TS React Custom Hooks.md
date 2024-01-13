@@ -1,11 +1,8 @@
 # <p><span style="color:cyan">23. TS React Custom Hooks</span></p>
 
 Ref) &nbsp;
-<br />
 
-### <span style="color:cyan"><b>Custom Hook 사용으로 ToDo 앱 구현</b></span>
-
-<br />
+&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
 
 > <span style="color:orange"><b>React + TypeScript 코딩 원칙</b></span>
 >
@@ -17,9 +14,11 @@ Ref) &nbsp;
 
 <br />
 
-(from tut21)  
+### <span style="color:cyan"><b>Custom Hook 사용으로 ToDo 앱 구현</b></span>
 
-&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
+<br />
+
+(from tut21)  
 
 &nbsp;1. &nbsp;<span style="color:orange"><b>기본 ToDo 앱</b></span>  
 &nbsp; &nbsp; &nbsp; &nbsp;- &nbsp;  

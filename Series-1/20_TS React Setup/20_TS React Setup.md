@@ -2,10 +2,6 @@
 
 <br />
 
-### <span style="color:cyan"><b>React + TypeScript Basic</b></span>
-
-<br />
-
 > <span style="color:orange"><b>React + TypeScript 코딩 원칙</b></span>
 >
 > 1. `void` 타입 인자(파라미터)의 리액트 함수 컴포넌트 선언은 심플하게!  
@@ -13,6 +9,10 @@
 > 3. 리액트 함수 컴포넌트 호출은 심플하게!  
 >
 > &nbsp; &nbsp; &nbsp; ※ &nbsp;리액트 함수 컴포넌트 파일 확장자는 `.tsx` 사용 필수!
+
+<br />
+
+### <span style="color:cyan"><b>React + TypeScript Basic</b></span>
 
 <br />
 

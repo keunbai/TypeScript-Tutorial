@@ -1,11 +1,11 @@
 # <p><span style="color:cyan">21. TS React Hooks</span></p>
 
 Ref) &nbsp;https://github.com/typescript-cheatsheets/react 
-<br />
-
-### <span style="color:cyan"><b>useState(), useEffect(), useReducer(), useRef(), useCallback()</b></span>
 
 <br />
+
+&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
+
 
 > <span style="color:orange"><b>React + TypeScript 코딩 원칙</b></span>
 >
@@ -17,9 +17,11 @@ Ref) &nbsp;https://github.com/typescript-cheatsheets/react
 
 <br />
 
-(from tut20)  
+### <span style="color:cyan"><b>useState(), useEffect(), useReducer(), useRef(), useCallback()</b></span>
 
-&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
+<br />
+
+(from tut20)  
 
 &nbsp;0. &nbsp;<span style="color:orange">json 데이터 생성</span>  
 &nbsp; &nbsp; &nbsp; &nbsp;- &nbsp;`public` 폴더 內 `data/db.json` 생성  

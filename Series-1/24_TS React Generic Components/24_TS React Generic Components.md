@@ -3,9 +3,8 @@
 Ref) &nbsp;
 <br />
 
-### <span style="color:cyan"><b>ToDo 앱 내 Generic Components 구현</b></span> 
 
-<br />
+&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
 
 > <span style="color:orange"><b>React + TypeScript 코딩 원칙</b></span>
 >
@@ -17,9 +16,11 @@ Ref) &nbsp;
 
 <br />
 
-(from tut21)  
+### <span style="color:cyan"><b>ToDo 앱 내 Generic Components 구현</b></span> 
 
-&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
+<br />
+
+(from tut21)  
 
 <br />
 

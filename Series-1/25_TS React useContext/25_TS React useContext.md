@@ -3,9 +3,8 @@
 Ref) &nbsp;
 <br />
 
-### <span style="color:cyan"><b>useContext() w/ useReducer()</b></span>  
+&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
 
-<br />
 
 > <span style="color:orange"><b>React + TypeScript 코딩 원칙</b></span>
 >
@@ -17,10 +16,12 @@ Ref) &nbsp;
 
 <br />
 
+### <span style="color:cyan"><b>useContext() w/ useReducer()</b></span>  
+
+<br />
+
 (from tut21, tut23)  
 통합본(`App_tot`) 은 tut21 에서, 커스텀 훅 버전(`App_useTodos`) 은 tut23 에서 수정
-
-&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
 
 <br />
 
@@ -28,7 +29,7 @@ Ref) &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp;- &nbsp;  
 
 ```tsx
-// src/App.tsx
+// src/App_tot.tsx
 
 //* =======================================
 //! (from tut21 React version)

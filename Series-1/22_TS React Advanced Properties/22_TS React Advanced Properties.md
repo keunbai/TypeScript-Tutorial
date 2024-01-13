@@ -7,6 +7,8 @@ Ref) &nbsp;
 
 <br />
 
+&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
+
 > <span style="color:orange"><b>React + TypeScript 코딩 원칙</b></span>
 >
 > 1. `void` 타입 인자(파라미터)의 리액트 함수 컴포넌트 선언은 심플하게!  
@@ -18,8 +20,6 @@ Ref) &nbsp;
 <br />
 
 (from tut21)  
-
-&nbsp;※ <span style="color:orange">`tsconfig.json` 內 `"strict": false` 설정</span>
 
 
 &nbsp;1. &nbsp;<span style="color:orange"><b>Prop Drilling `useState()`</b></span>  
